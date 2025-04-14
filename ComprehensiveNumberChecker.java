@@ -1,5 +1,6 @@
 import java.util.*;
 
+// Main class for the Comprehensive Number Checker 
 public class ComprehensiveNumberChecker {
     public static void main(String[] args) {
         int[] numbers = {1, 4, 11, 16, 21, 121, 153, 6, 28, 9474, 1634, 703, 145, 123, 19, 44};
@@ -24,7 +25,7 @@ public class ComprehensiveNumberChecker {
             System.out.println("Spy Number: " + isSpyNumber(num));
             System.out.println("Duck Number: " + isDuckNumber(num));
             System.out.println("Happy Number: " + isHappyNumber(num));
-            System.out.println("Sad Number: " + isSadNumber(num));
+            System.out.println("Sad Number: " + !isHappyNumber(num));  // Sad if not Happy
             System.out.println("Special Number: " + isSpecialNumber(num));
             System.out.println("Keith Number: " + isKeithNumber(num));
             System.out.println("Circular Prime: " + isCircularPrime(num));
@@ -33,17 +34,14 @@ public class ComprehensiveNumberChecker {
         }
     }
 
-    // Check if number is Even
     public static boolean isEven(int n) {
         return (n & 1) == 0;
     }
 
-    // Check if number is Odd
     public static boolean isOdd(int n) {
         return (n & 1) == 1;
     }
 
-    // Prime check using mathematical logic
     public static boolean isPrimeMath(int n) {
         if (n <= 1) return false;
         for (int i = 2; i <= Math.sqrt(n); i++) {
@@ -52,7 +50,6 @@ public class ComprehensiveNumberChecker {
         return true;
     }
 
-    // Prime check using bit manipulation
     public static boolean isPrimeBitManip(int n) {
         if (n <= 1) return false;
         if (n == 2) return true;
@@ -63,7 +60,6 @@ public class ComprehensiveNumberChecker {
         return true;
     }
 
-    // Check if number is a Perfect Number
     public static boolean isPerfectNumber(int n) {
         if (n <= 0) return false;
         int sum = 1;
@@ -76,7 +72,6 @@ public class ComprehensiveNumberChecker {
         return sum == n && n != 1;
     }
 
-    // Check if number is a Deficient Number
     public static boolean isDeficientNumber(int n) {
         if (n <= 0) return false;
         int sum = 1;
@@ -89,7 +84,6 @@ public class ComprehensiveNumberChecker {
         return sum < n;
     }
 
-    // Check if number is an Abundant Number
     public static boolean isAbundantNumber(int n) {
         if (n <= 0) return false;
         int sum = 1;
@@ -102,14 +96,12 @@ public class ComprehensiveNumberChecker {
         return sum > n;
     }
 
-    // Perfect Square check using mathematical logic
     public static boolean isPerfectSquareMath(int n) {
         if (n < 0) return false;
         int sqrt = (int) Math.sqrt(n);
         return sqrt * sqrt == n;
     }
 
-    // Perfect Square check using bit manipulation
     public static boolean isPerfectSquareBitManip(int n) {
         if (n < 0) return false;
         int x = n;
@@ -119,13 +111,11 @@ public class ComprehensiveNumberChecker {
         return x * x == n;
     }
 
-    // Fibonacci number check
     public static boolean isFibonacci(int n) {
         if (n < 0) return false;
         return isPerfectSquareMath(5 * n * n + 4) || isPerfectSquareMath(5 * n * n - 4);
     }
 
-    // Armstrong number check
     public static boolean isArmstrong(int n) {
         int sum = 0, temp = n, digits = String.valueOf(n).length();
         while (temp > 0) {
@@ -136,7 +126,6 @@ public class ComprehensiveNumberChecker {
         return sum == n;
     }
 
-    // Palindrome check using mathematical approach
     public static boolean isPalindromeMath(int n) {
         int original = n, reversed = 0;
         while (n > 0) {
@@ -146,7 +135,6 @@ public class ComprehensiveNumberChecker {
         return original == reversed;
     }
 
-    // Harshad (Niven) Number check
     public static boolean isHarshadNumber(int n) {
         if (n <= 0) return false;
         int sum = 0, temp = n;
@@ -157,13 +145,11 @@ public class ComprehensiveNumberChecker {
         return n % sum == 0;
     }
 
-    // Automorphic Number check
     public static boolean isAutomorphic(int n) {
         int square = n * n;
         return Integer.toString(square).endsWith(Integer.toString(n));
     }
 
-    // Kaprekar Number check
     public static boolean isKaprekar(int n) {
         if (n == 1) return true;
         int square = n * n;
@@ -176,7 +162,6 @@ public class ComprehensiveNumberChecker {
         return l + r == n;
     }
 
-    // Spy Number check
     public static boolean isSpyNumber(int n) {
         int sum = 0, prod = 1;
         while (n > 0) {
@@ -188,10 +173,95 @@ public class ComprehensiveNumberChecker {
         return sum == prod;
     }
 
-    // Add checks for:
-    // - Happy Numbers
-    // - Keith Numbers
-    // - Smith Numbers
+    public static boolean isDuckNumber(int n) {
+        String str = Integer.toString(n);
+        return str.contains("0") && str.charAt(0) != '0';
+    }
 
-    // Let me know how you'd like more expansions!
+    public static boolean isHappyNumber(int n) {
+        Set<Integer> seen = new HashSet<>();
+        while (n != 1 && !seen.contains(n)) {
+            seen.add(n);
+            int sum = 0;
+            while (n > 0) {
+                int digit = n % 10;
+                sum += digit * digit;
+                n /= 10;
+            }
+            n = sum;
+        }
+        return n == 1;
+    }
+
+    public static boolean isSpecialNumber(int n) {
+        int sum = 0, temp = n;
+        while (temp > 0) {
+            int digit = temp % 10;
+            sum += factorial(digit);
+            temp /= 10;
+        }
+        return sum == n;
+    }
+
+    public static int factorial(int n) {
+        int fact = 1;
+        for (int i = 2; i <= n; i++) fact *= i;
+        return fact;
+    }
+
+    public static boolean isKeithNumber(int n) {
+        List<Integer> terms = new ArrayList<>();
+        int temp = n;
+        while (temp > 0) {
+            terms.add(0, temp % 10);
+            temp /= 10;
+        }
+        int sum = 0, i = terms.size();
+        while (sum < n) {
+            sum = 0;
+            for (int j = terms.size() - i; j < terms.size(); j++) {
+                sum += terms.get(j);
+            }
+            terms.add(sum);
+        }
+        return sum == n;
+    }
+
+    public static boolean isCircularPrime(int n) {
+        if (!isPrimeMath(n)) return false;
+        String str = Integer.toString(n);
+        for (int i = 1; i < str.length(); i++) {
+            String rotated = str.substring(i) + str.substring(0, i);
+            if (!isPrimeMath(Integer.parseInt(rotated))) return false;
+        }
+        return true;
+    }
+
+    public static boolean isSmithNumber(int n) {
+        if (isPrimeMath(n) || n < 2) return false;
+
+        int sumDigits = sumOfDigits(n);
+        int sumFactors = 0;
+        int num = n;
+
+        for (int i = 2; i <= num / i; i++) {
+            while (n % i == 0) {
+                sumFactors += sumOfDigits(i);
+                n /= i;
+            }
+        }
+
+        if (n > 1) sumFactors += sumOfDigits(n);
+
+        return sumDigits == sumFactors;
+    }
+
+    public static int sumOfDigits(int n) {
+        int sum = 0;
+        while (n > 0) {
+            sum += n % 10;
+            n /= 10;
+        }
+        return sum;
+    }
 }

@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class LibraryManagementSystem {
+public class librarymanagementsystem {
     private ArrayList<Book> books;
     private ArrayList<User> users;
 
-    public LibraryManagementSystem() {
+    public librarymanagementsystem() {
         books = new ArrayList<>();
         users = new ArrayList<>();
     }
@@ -16,20 +16,28 @@ public class LibraryManagementSystem {
     }
 
     public void registerUser(String name) {
-        users.add(new User(name));
-        System.out.println("User registered: " + name);
+        if (findUser(name) == null) {
+            users.add(new User(name));
+            System.out.println("User registered: " + name);
+        } else {
+            System.out.println("User already exists.");
+        }
     }
 
     public void borrowBook(String userName, String bookTitle) {
         User user = findUser(userName);
         Book book = findBook(bookTitle);
 
-        if (user != null && book != null && !book.isBorrowed()) {
+        if (user == null) {
+            System.out.println("User not found.");
+        } else if (book == null) {
+            System.out.println("Book not found.");
+        } else if (book.isBorrowed()) {
+            System.out.println("Book is already borrowed.");
+        } else {
             book.setBorrowed(true);
             user.borrowBook(book);
             System.out.println(userName + " borrowed " + bookTitle);
-        } else {
-            System.out.println("Cannot borrow the book.");
         }
     }
 
@@ -37,12 +45,16 @@ public class LibraryManagementSystem {
         User user = findUser(userName);
         Book book = findBook(bookTitle);
 
-        if (user != null && book != null && book.isBorrowed()) {
+        if (user == null) {
+            System.out.println("User not found.");
+        } else if (book == null) {
+            System.out.println("Book not found.");
+        } else if (!book.isBorrowed()) {
+            System.out.println("Book is not currently borrowed.");
+        } else {
             book.setBorrowed(false);
             user.returnBook(book);
             System.out.println(userName + " returned " + bookTitle);
-        } else {
-            System.out.println("Cannot return the book.");
         }
     }
 
@@ -72,9 +84,9 @@ public class LibraryManagementSystem {
     }
 
     public static void main(String[] args) {
-        LibraryManagementSystem library = new LibraryManagementSystem();
+        librarymanagementsystem library = new librarymanagementsystem();
         Scanner scanner = new Scanner(System.in);
-        
+
         while (true) {
             System.out.println("\nLibrary Management System");
             System.out.println("1. Add Book");
@@ -84,10 +96,10 @@ public class LibraryManagementSystem {
             System.out.println("5. Display Books");
             System.out.println("6. Exit");
             System.out.print("Choose an option: ");
-            
+
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
-            
+
             switch (choice) {
                 case 1:
                     System.out.print("Enter book title: ");
@@ -98,22 +110,22 @@ public class LibraryManagementSystem {
                     break;
                 case 2:
                     System.out.print("Enter user name: ");
-                    String name = scanner.nextLine();
-                    library.registerUser(name);
+                    String userName = scanner.nextLine();
+                    library.registerUser(userName);
                     break;
                 case 3:
                     System.out.print("Enter user name: ");
-                    String borrowerName = scanner.nextLine();
+                    String borrower = scanner.nextLine();
                     System.out.print("Enter book title: ");
-                    String borrowTitle = scanner.nextLine();
-                    library.borrowBook(borrowerName, borrowTitle);
+                    String borrowBook = scanner.nextLine();
+                    library.borrowBook(borrower, borrowBook);
                     break;
                 case 4:
                     System.out.print("Enter user name: ");
-                    String returnerName = scanner.nextLine();
+                    String returner = scanner.nextLine();
                     System.out.print("Enter book title: ");
-                    String returnTitle = scanner.nextLine();
-                    library.returnBook(returnerName, returnTitle);
+                    String returnBook = scanner.nextLine();
+                    library.returnBook(returner, returnBook);
                     break;
                 case 5:
                     library.displayBooks();
@@ -149,12 +161,12 @@ class Book {
     }
 
     public void setBorrowed(boolean borrowed) {
-        isBorrowed = borrowed;
+        this.isBorrowed = borrowed;
     }
 
     @Override
     public String toString() {
-        return title + " by " + author + (isBorrowed ? " (Borrowed)" : "");
+        return title + " by " + author + (isBorrowed ? " (Borrowed)" : " (Available)");
     }
 }
 
